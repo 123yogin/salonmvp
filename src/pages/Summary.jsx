@@ -1,5 +1,6 @@
 import { Download } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { summaryAPI } from '../services/api';
 
 const Summary = () => {
@@ -7,10 +8,11 @@ const Summary = () => {
     const [breakdown, setBreakdown] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const location = useLocation();
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [location.pathname]);
 
     const fetchData = async () => {
         try {
@@ -19,6 +21,8 @@ const Summary = () => {
                 summaryAPI.getToday(),
                 summaryAPI.getBreakdown(),
             ]);
+            console.log('Summary data received:', summaryData);
+            console.log('Breakdown data received:', breakdownData);
             setSummary(summaryData);
             setBreakdown(breakdownData.breakdown);
             setError(null);

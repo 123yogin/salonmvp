@@ -54,7 +54,7 @@ const Login = () => {
             }
 
             if (result.success) {
-                navigate('/');
+                navigate('/home');
             } else {
                 setError(result.error);
             }

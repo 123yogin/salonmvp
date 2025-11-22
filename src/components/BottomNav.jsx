@@ -3,9 +3,9 @@ import { NavLink } from 'react-router-dom';
 
 const BottomNav = () => {
     const navItems = [
-        { icon: Home, label: 'Log', path: '/' },
-        { icon: FileText, label: 'Summary', path: '/summary' },
-        { icon: Settings, label: 'Settings', path: '/settings' },
+        { icon: Home, label: 'Log', path: '/home' },
+        { icon: FileText, label: 'Summary', path: '/home/summary' },
+        { icon: Settings, label: 'Settings', path: '/home/settings' },
     ];
 
     return (
