@@ -42,6 +42,8 @@ const Home = () => {
                 staff_id: logData.staff_id,
             });
             setIsPopupOpen(false);
+            // Dispatch event to update TopBar revenue
+            window.dispatchEvent(new Event('serviceLogAdded'));
             // Could show success message here
         } catch (err) {
             console.error('Error adding service log:', err);
