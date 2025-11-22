@@ -6,6 +6,11 @@ const Navbar = () => {
     const navigate = useNavigate();
     const { isAuthenticated, logout } = useAuth();
 
+    const handleLogout = async () => {
+        await logout();
+        window.location.href = '/';
+    };
+
     const handleScroll = (e, targetId) => {
         e.preventDefault();
         const element = document.getElementById(targetId);
@@ -27,7 +32,7 @@ const Navbar = () => {
                     {isAuthenticated ? (
                         <>
                             <button onClick={() => navigate('/home')} className="btn-nav">Dashboard</button>
-                            <button onClick={logout} className="btn-nav">Logout</button>
+                            <button onClick={handleLogout} className="btn-nav">Logout</button>
                         </>
                     ) : (
                         <button onClick={() => navigate('/login')} className="btn-nav btn-primary">Login</button>
