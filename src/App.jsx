@@ -9,6 +9,7 @@ const Home = lazy(() => import('./pages/Home'));
 const Summary = lazy(() => import('./pages/Summary'));
 const Settings = lazy(() => import('./pages/Settings'));
 const EditServices = lazy(() => import('./pages/EditServices'));
+const Profile = lazy(() => import('./pages/Profile'));
 
 // Loading Component
 const LoadingScreen = () => (
@@ -27,6 +28,7 @@ function App() {
                     <Route path="summary" element={<Summary />} />
                     <Route path="settings" element={<Settings />} />
                     <Route path="edit-services" element={<EditServices />} />
+                    <Route path="profile" element={<Profile />} />
                 </Route>
             </Routes>
         </Suspense>

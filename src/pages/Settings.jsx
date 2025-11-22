@@ -15,7 +15,7 @@ const Settings = () => {
                     <ChevronRight size={20} color="var(--text-secondary)" />
                 </div>
 
-                <div className="settings-item">
+                <div className="settings-item" onClick={() => navigate('/profile')}>
                     <div className="settings-item-left">
                         <User size={20} color="var(--text-secondary)" />
                         <span className="settings-label">Profile</span>
