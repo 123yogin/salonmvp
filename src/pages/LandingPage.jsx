@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Calendar, Scissors, Smile, Star, User, Zap } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 import ServiceCard from '../components/ServiceCard';
@@ -38,8 +38,8 @@ const LandingPage = () => {
                         Modern salon services for everyone. Visit us, explore styles, and enjoy a seamless digital grooming experience.
                     </p>
                     <div className="hero-buttons">
-                        <a href="#services" className="btn btn-primary">Explore Services</a>
-                        <button className="btn btn-secondary" onClick={() => navigate('/login')}>Login</button>
+                        <Link to="#services" className="btn btn-primary">Explore Services</Link>
+                        <button className="btn btn-secondary" onClick={() => navigate('/login')} aria-label="Login to the application">Login</button>
                     </div>
                 </motion.div>
 
@@ -53,6 +53,7 @@ const LandingPage = () => {
                         src={heroImage}
                         alt="Unisex Salon"
                         className="hero-image"
+                        loading="lazy"
                         animate={{ y: [0, -20, 0] }}
                         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                     />
@@ -68,7 +69,7 @@ const LandingPage = () => {
                     <div className="services-grid">
                         {services.map((service, index) => (
                             <ServiceCard
-                                key={index}
+                                key={service.title}
                                 icon={service.icon}
                                 title={service.title}
                                 delay={index * 0.1}
@@ -151,7 +152,7 @@ const LandingPage = () => {
                 <div className="cta-content">
                     <h2>Visit our salon anytime</h2>
                     <p>Fast, easy, and seamless. Get the look you deserve.</p>
-                    <button className="btn btn-accent" onClick={() => navigate('/login')}>Get Started</button>
+                    <button className="btn btn-accent" onClick={() => navigate('/login')} aria-label="Get started and login">Get Started</button>
                 </div>
             </section>
 
