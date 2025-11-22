@@ -10,10 +10,9 @@ const AddServicePopup = ({ isOpen, onClose, onAdd }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (name && price) {
-            onAdd({ name, price: Number(price) });
+            onAdd({ name, default_price: Number(price) });
             setName('');
             setPrice('');
-            onClose();
         }
     };
 

@@ -1,16 +1,18 @@
-import { ChevronLeft, MapPin, Phone, Store, User } from 'lucide-react';
+import { ChevronLeft, Mail, MapPin, Phone, Store, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Profile = () => {
     const navigate = useNavigate();
+    const { user, salon, loading } = useAuth();
 
-    // Placeholder data - in a real app this would come from a backend/context
-    const profileData = {
-        salonName: "Luxe Salon & Spa",
-        ownerName: "Yogin",
-        phone: "+91 98765 43210",
-        address: "123, Fashion Street, Mumbai"
-    };
+    if (loading) {
+        return (
+            <div className="flex-center" style={{ height: '60vh' }}>
+                <div className="spinner"></div>
+            </div>
+        );
+    }
 
     return (
         <div className="page-container">
@@ -36,43 +38,72 @@ const Profile = () => {
                         <Store size={20} color="var(--text-secondary)" />
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                             <span className="settings-label" style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Salon Name</span>
-                            <span className="settings-value" style={{ fontSize: '16px', fontWeight: '500' }}>{profileData.salonName}</span>
+                            <span className="settings-value" style={{ fontSize: '16px', fontWeight: '500' }}>
+                                {salon?.name || 'Not available'}
+                            </span>
                         </div>
                     </div>
                 </div>
 
-                <div className="settings-item" style={{ cursor: 'default' }}>
-                    <div className="settings-item-left">
-                        <User size={20} color="var(--text-secondary)" />
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <span className="settings-label" style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Owner Name</span>
-                            <span className="settings-value" style={{ fontSize: '16px', fontWeight: '500' }}>{profileData.ownerName}</span>
+                {user?.email && (
+                    <div className="settings-item" style={{ cursor: 'default' }}>
+                        <div className="settings-item-left">
+                            <Mail size={20} color="var(--text-secondary)" />
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                <span className="settings-label" style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Email</span>
+                                <span className="settings-value" style={{ fontSize: '16px', fontWeight: '500' }}>
+                                    {user.email}
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
 
-                <div className="settings-item" style={{ cursor: 'default' }}>
-                    <div className="settings-item-left">
-                        <Phone size={20} color="var(--text-secondary)" />
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <span className="settings-label" style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Phone Number</span>
-                            <span className="settings-value" style={{ fontSize: '16px', fontWeight: '500' }}>{profileData.phone}</span>
+                {user?.phone && (
+                    <div className="settings-item" style={{ cursor: 'default' }}>
+                        <div className="settings-item-left">
+                            <Phone size={20} color="var(--text-secondary)" />
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                <span className="settings-label" style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Phone Number</span>
+                                <span className="settings-value" style={{ fontSize: '16px', fontWeight: '500' }}>
+                                    {user.phone}
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
 
-                <div className="settings-item" style={{ cursor: 'default' }}>
-                    <div className="settings-item-left">
-                        <MapPin size={20} color="var(--text-secondary)" />
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <span className="settings-label" style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Address</span>
-                            <span className="settings-value" style={{ fontSize: '16px', fontWeight: '500' }}>{profileData.address}</span>
+                {salon?.address && (
+                    <div className="settings-item" style={{ cursor: 'default' }}>
+                        <div className="settings-item-left">
+                            <MapPin size={20} color="var(--text-secondary)" />
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                <span className="settings-label" style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Address</span>
+                                <span className="settings-value" style={{ fontSize: '16px', fontWeight: '500' }}>
+                                    {salon.address}
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
+
+                {salon?.timezone && (
+                    <div className="settings-item" style={{ cursor: 'default' }}>
+                        <div className="settings-item-left">
+                            <User size={20} color="var(--text-secondary)" />
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                <span className="settings-label" style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Timezone</span>
+                                <span className="settings-value" style={{ fontSize: '16px', fontWeight: '500' }}>
+                                    {salon.timezone}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
 };
 
 export default Profile;
+

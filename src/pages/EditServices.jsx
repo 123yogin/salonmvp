@@ -1,42 +1,94 @@
-import { Edit2, Plus, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { Plus, Trash2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import AddServicePopup from '../components/AddServicePopup';
+import { servicesAPI } from '../services/api';
 
 const EditServices = () => {
     const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
-    const [services, setServices] = useState([
-        { id: 1, name: 'Haircut (Men)', price: 250 },
-        { id: 2, name: 'Haircut (Women)', price: 500 },
-        { id: 3, name: 'Shaving', price: 150 },
-        { id: 4, name: 'Hair Spa', price: 800 },
-        { id: 5, name: 'Facial', price: 1200 },
-        { id: 6, name: 'Head Massage', price: 300 },
-    ]);
+    const [services, setServices] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const handleAddService = (newService) => {
-        setServices([...services, { id: Date.now(), ...newService }]);
+    useEffect(() => {
+        fetchServices();
+    }, []);
+
+    const fetchServices = async () => {
+        try {
+            setLoading(true);
+            const data = await servicesAPI.getAll();
+            setServices(data.services);
+            setError(null);
+        } catch (err) {
+            setError('Failed to load services');
+            console.error('Error fetching services:', err);
+        } finally {
+            setLoading(false);
+        }
     };
+
+    const handleAddService = async (newService) => {
+        try {
+            await servicesAPI.create(newService);
+            await fetchServices(); // Refresh list
+            setIsAddPopupOpen(false);
+        } catch (err) {
+            console.error('Error adding service:', err);
+            alert('Failed to add service. Please try again.');
+        }
+    };
+
+    const handleDeleteService = async (serviceId) => {
+        if (!confirm('Are you sure you want to delete this service?')) {
+            return;
+        }
+
+        try {
+            await servicesAPI.delete(serviceId);
+            await fetchServices(); // Refresh list
+        } catch (err) {
+            console.error('Error deleting service:', err);
+            alert('Failed to delete service. Please try again.');
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="flex-center" style={{ height: '60vh' }}>
+                <div className="spinner"></div>
+            </div>
+        );
+    }
 
     return (
         <div className="page-container">
+            {error && <div className="error-message">{error}</div>}
+
             <div className="edit-service-list">
                 {services.map((service) => (
                     <div key={service.id} className="edit-service-item">
                         <div className="service-info">
                             <span className="service-name">{service.name}</span>
-                            <span className="service-price">₹{service.price}</span>
+                            <span className="service-price">₹{service.default_price}</span>
                         </div>
                         <div style={{ display: 'flex', gap: '12px' }}>
-                            <button className="icon-btn" style={{ padding: '8px', background: 'none', border: 'none', cursor: 'pointer' }}>
-                                <Edit2 size={18} color="var(--text-secondary)" />
-                            </button>
-                            <button className="icon-btn" style={{ padding: '8px', background: 'none', border: 'none', cursor: 'pointer' }}>
+                            <button
+                                className="icon-btn"
+                                style={{ padding: '8px', background: 'none', border: 'none', cursor: 'pointer' }}
+                                onClick={() => handleDeleteService(service.id)}
+                            >
                                 <Trash2 size={18} color="#EF4444" />
                             </button>
                         </div>
                     </div>
                 ))}
             </div>
+
+            {services.length === 0 && !error && (
+                <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-secondary)' }}>
+                    No services yet. Click the button below to add your first service.
+                </div>
+            )}
 
             <div className="fab-container">
                 <button className="fab-btn" onClick={() => setIsAddPopupOpen(true)}>
@@ -55,3 +107,4 @@ const EditServices = () => {
 };
 
 export default EditServices;
+
