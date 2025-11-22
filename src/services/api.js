@@ -41,6 +41,8 @@ api.interceptors.response.use(
             // Mark as suppressed to prevent console logging
             error.suppressLog = true;
             suppress401Errors.delete(error.config.url);
+            // Prevent browser from logging this as a network error
+            error.config._suppressErrorLog = true;
         }
         return Promise.reject(error);
     }
@@ -67,50 +69,29 @@ export const authAPI = {
     },
 
     getCurrentUser: async () => {
-        // Temporarily suppress console.error to prevent logging expected 401 errors
-        const originalConsoleError = console.error;
-        const originalConsoleWarn = console.warn;
-        
-        // Override console methods to filter out auth check 401 errors
-        console.error = (...args) => {
-            const errorString = String(args[0] || '');
-            if (errorString.includes('/api/auth/me') && 
-                (errorString.includes('401') || errorString.includes('UNAUTHORIZED'))) {
-                return; // Suppress this error
-            }
-            originalConsoleError.apply(console, args);
-        };
-        
-        console.warn = (...args) => {
-            const warnString = String(args[0] || '');
-            if (warnString.includes('/api/auth/me') && warnString.includes('401')) {
-                return; // Suppress this warning
-            }
-            originalConsoleWarn.apply(console, args);
-        };
-        
         try {
             // Use validateStatus to prevent axios from treating 401 as an error
+            // This prevents the browser from logging it as a failed request
             const response = await api.get('/api/auth/me', {
-                validateStatus: (status) => status === 200 || status === 401
+                validateStatus: (status) => status === 200 || status === 401,
+                // Suppress error logging for this specific request
+                _suppressErrorLog: true
             });
             
-            // Restore console methods
-            console.error = originalConsoleError;
-            console.warn = originalConsoleWarn;
-            
             if (response.status === 401) {
-                // Create a custom error that won't be logged
+                // Silently throw error - don't log to console
                 const error = new Error('Not authenticated');
                 error.response = { status: 401 };
+                error.suppressLog = true; // Mark to suppress logging
                 throw error;
             }
             
             return response.data;
         } catch (error) {
-            // Restore console methods in case of other errors
-            console.error = originalConsoleError;
-            console.warn = originalConsoleWarn;
+            // Only throw if it's not a 401 (which is expected when not logged in)
+            if (error.response?.status === 401) {
+                error.suppressLog = true;
+            }
             throw error;
         }
     },

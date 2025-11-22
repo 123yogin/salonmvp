@@ -23,12 +23,26 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const checkAuth = async () => {
+        // Skip auth check if we just logged out (prevents unnecessary API call)
+        if (sessionStorage.getItem('just_logged_out') === 'true') {
+            sessionStorage.removeItem('just_logged_out');
+            setUser(null);
+            setSalon(null);
+            setLoading(false);
+            return;
+        }
+        
         try {
             const data = await authAPI.getCurrentUser();
             setUser(data.user);
             setSalon(data.salon);
         } catch (err) {
-            // User not logged in
+            // User not logged in - silently handle 401 errors (expected behavior)
+            // Don't log 401 errors for /api/auth/me as they're expected when not authenticated
+            if (err.response?.status !== 401 || !err.suppressLog) {
+                // Only log if it's not a suppressed 401 error
+                console.error('Auth check error:', err);
+            }
             setUser(null);
             setSalon(null);
         } finally {
@@ -66,11 +80,17 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
+            // Mark that we're logging out to prevent auth check after page reload
+            sessionStorage.setItem('just_logged_out', 'true');
             await authAPI.logout();
             setUser(null);
             setSalon(null);
         } catch (err) {
             console.error('Logout error:', err);
+            // Still mark as logged out even if API call fails
+            sessionStorage.setItem('just_logged_out', 'true');
+            setUser(null);
+            setSalon(null);
         }
     };
 
