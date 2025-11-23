@@ -1,24 +1,23 @@
 import { motion } from 'framer-motion';
-import { Calendar, Scissors, Smile, Star, User, Zap } from 'lucide-react';
+import { BarChart3, CheckCircle2, LayoutDashboard, ShieldCheck, Smartphone, Zap } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 import ServiceCard from '../components/ServiceCard';
 import '../styles/LandingPage.css';
 
-// Hero image - using placeholder if actual image doesn't exist
-// You can replace this with the actual image path when available
-const heroImage = 'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800&h=600&fit=crop';
+// Hero image - showing a modern business/tech context
+const heroImage = 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&h=600&fit=crop';
 
 const LandingPage = () => {
     const navigate = useNavigate();
-    const services = [
-        { icon: <Scissors />, title: "Men's Haircut" },
-        { icon: <User />, title: "Women's Haircut" },
-        { icon: <Zap />, title: "Beard Grooming" },
-        { icon: <Star />, title: "Hair Styling" },
-        { icon: <Smile />, title: "Facial & Skin Care" },
-        { icon: <Calendar />, title: "Spa & Massage" },
+    const features = [
+        { icon: <LayoutDashboard />, title: "Smart Dashboard" },
+        { icon: <BarChart3 />, title: "Revenue Tracking" },
+        { icon: <Zap />, title: "Quick Service Log" },
+        { icon: <Smartphone />, title: "Mobile Optimized" },
+        { icon: <CheckCircle2 />, title: "Custom Services" },
+        { icon: <ShieldCheck />, title: "Secure & Private" },
     ];
 
     return (
@@ -33,13 +32,13 @@ const LandingPage = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                    <h1 className="hero-title">Premium Unisex Salon & Grooming Experience</h1>
+                    <h1 className="hero-title">The Modern Operating System for Your Salon</h1>
                     <p className="hero-subtitle">
-                        Modern salon services for everyone. Visit us, explore styles, and enjoy a seamless digital grooming experience.
+                        Ditch the pen and paper. Track daily sales, manage your service menu, and get real-time revenue insights in one simple app.
                     </p>
                     <div className="hero-buttons">
-                        <Link to="#services" className="btn btn-primary">Explore Services</Link>
-                        <button className="btn btn-secondary" onClick={() => navigate('/login')} aria-label="Login to the application">Login</button>
+                        <button className="btn btn-primary" onClick={() => navigate('/login')}>Start for Free</button>
+                        <Link to="#features" className="btn btn-secondary">See Features</Link>
                     </div>
                 </motion.div>
 
@@ -51,7 +50,7 @@ const LandingPage = () => {
                 >
                     <motion.img
                         src={heroImage}
-                        alt="Unisex Salon"
+                        alt="Salon Management Dashboard"
                         className="hero-image"
                         loading="eager"
                         animate={{ y: [0, -20, 0] }}
@@ -60,18 +59,18 @@ const LandingPage = () => {
                 </motion.div>
             </section>
 
-            {/* Services Section */}
-            <section className="services-section" id="services">
+            {/* Features Section */}
+            <section className="services-section" id="features">
                 <div className="container">
-                    <h2 className="section-title">Our Services</h2>
-                    <p className="section-subtitle">Top-notch grooming services for men and women.</p>
+                    <h2 className="section-title">Everything You Need</h2>
+                    <p className="section-subtitle">Powerful tools to help your salon business grow.</p>
 
                     <div className="services-grid">
-                        {services.map((service, index) => (
+                        {features.map((feature, index) => (
                             <ServiceCard
-                                key={service.title}
-                                icon={service.icon}
-                                title={service.title}
+                                key={feature.title}
+                                icon={feature.icon}
+                                title={feature.title}
                                 delay={index * 0.1}
                             />
                         ))}
@@ -82,66 +81,46 @@ const LandingPage = () => {
             {/* Pricing Section */}
             <section className="pricing-section" id="pricing">
                 <div className="container">
-                    <h2 className="section-title">Pricing Plans</h2>
-                    <p className="section-subtitle">Choose the perfect package for your needs.</p>
+                    <h2 className="section-title">Simple Pricing</h2>
+                    <p className="section-subtitle">Start for free, upgrade as you grow.</p>
 
                     <div className="pricing-container">
-                        {/* Basic Plan */}
+                        {/* Starter Plan */}
                         <motion.div
-                            className="pricing-card"
+                            className="pricing-card highlighted"
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
                             viewport={{ once: true }}
                         >
-                            <h3>Basic Grooming</h3>
-                            <div className="price">$29<span>/visit</span></div>
+                            <h3>Starter</h3>
+                            <div className="price">$0<span>/month</span></div>
                             <ul className="features-list">
-                                <li>Haircut & Styling</li>
-                                <li>Beard Trim</li>
-                                <li>Standard Wash</li>
-                                <li>Beverage</li>
+                                <li>Unlimited Service Logs</li>
+                                <li>Basic Revenue Analytics</li>
+                                <li>Up to 50 Custom Services</li>
+                                <li>Single User Access</li>
                             </ul>
-                            <button className="btn btn-secondary">View Details</button>
+                            <button className="btn btn-primary" onClick={() => navigate('/login')}>Get Started Now</button>
                         </motion.div>
 
-                        {/* Premium Plan */}
+                        {/* Pro Plan */}
                         <motion.div
-                            className="pricing-card highlighted"
+                            className="pricing-card"
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.2 }}
                             viewport={{ once: true }}
                         >
-                            <h3>Premium Care</h3>
-                            <div className="price">$59<span>/visit</span></div>
+                            <h3>Professional</h3>
+                            <div className="price">$29<span>/month</span></div>
                             <ul className="features-list">
-                                <li>All Basic Features</li>
-                                <li>Facial Treatment</li>
-                                <li>Premium Products</li>
-                                <li>Priority Booking</li>
-                                <li>Head Massage</li>
+                                <li>Advanced Analytics & Export</li>
+                                <li>Staff Performance Tracking</li>
+                                <li>Inventory Management</li>
+                                <li>Priority Support</li>
                             </ul>
-                            <button className="btn btn-accent">View Details</button>
-                        </motion.div>
-
-                        {/* Advanced Plan */}
-                        <motion.div
-                            className="pricing-card"
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: 0.4 }}
-                            viewport={{ once: true }}
-                        >
-                            <h3>Advanced Styling</h3>
-                            <div className="price">$89<span>/visit</span></div>
-                            <ul className="features-list">
-                                <li>All Premium Features</li>
-                                <li>Full Body Spa</li>
-                                <li>Hair Treatment</li>
-                                <li>Consultation</li>
-                            </ul>
-                            <button className="btn btn-secondary">View Details</button>
+                            <button className="btn btn-secondary" disabled style={{ opacity: 0.7, cursor: 'not-allowed' }}>Coming Soon</button>
                         </motion.div>
                     </div>
                 </div>
@@ -150,9 +129,9 @@ const LandingPage = () => {
             {/* CTA Section */}
             <section className="cta-section">
                 <div className="cta-content">
-                    <h2>Visit our salon anytime</h2>
-                    <p>Fast, easy, and seamless. Get the look you deserve.</p>
-                    <button className="btn btn-accent" onClick={() => navigate('/login')} aria-label="Get started and login">Get Started</button>
+                    <h2>Ready to modernize your salon?</h2>
+                    <p>Join hundreds of salon owners managing their business smarter.</p>
+                    <button className="btn btn-accent" onClick={() => navigate('/login')} aria-label="Get started and login">Create Free Account</button>
                 </div>
             </section>
 
