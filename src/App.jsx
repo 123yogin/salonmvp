@@ -10,6 +10,7 @@ import './styles/pages.css';
 const LandingPage = lazy(() => import('./pages/LandingPage'));
 const Home = lazy(() => import('./pages/Home'));
 const Summary = lazy(() => import('./pages/Summary'));
+const Analytics = lazy(() => import('./pages/Analytics'));
 const EditServices = lazy(() => import('./pages/EditServices'));
 const Profile = lazy(() => import('./pages/Profile'));
 const Login = lazy(() => import('./pages/Login'));
@@ -71,6 +72,11 @@ function App() {
                         <Route path="summary" element={
                             <RoleRoute allowedRoles={['OWNER']}>
                                 <Summary />
+                            </RoleRoute>
+                        } />
+                        <Route path="analytics" element={
+                            <RoleRoute allowedRoles={['OWNER']}>
+                                <Analytics />
                             </RoleRoute>
                         } />
                         <Route path="edit-services" element={

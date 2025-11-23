@@ -139,18 +139,31 @@ export const logsAPI = {
 // ============================================
 
 export const summaryAPI = {
-    getToday: async () => {
-        const response = await api.get('/api/summary/today');
+    getToday: async (date = null) => {
+        const params = date ? { date } : {};
+        const response = await api.get('/api/summary', { params });
         return response.data;
     },
 
-    getBreakdown: async () => {
-        const response = await api.get('/api/summary/breakdown');
+    getBreakdown: async (date = null) => {
+        const params = date ? { date } : {};
+        const response = await api.get('/api/summary/breakdown', { params });
         return response.data;
     },
 
-    getStaffPerformance: async () => {
-        const response = await api.get('/api/summary/staff-performance');
+    getStaffPerformance: async (date = null) => {
+        const params = date ? { date } : {};
+        const response = await api.get('/api/summary/staff-performance', { params });
+        return response.data;
+    },
+
+    getMonthlyAnalytics: async (month, year) => {
+        const response = await api.get('/api/analytics/monthly', { params: { month, year } });
+        return response.data;
+    },
+
+    getYearlyAnalytics: async (year) => {
+        const response = await api.get('/api/analytics/yearly', { params: { year } });
         return response.data;
     },
 

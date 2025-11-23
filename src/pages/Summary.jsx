@@ -1,9 +1,14 @@
-import { Download } from 'lucide-react';
+import { Download, BarChart2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { summaryAPI } from '../services/api';
 
 const Summary = () => {
+    // Get today's date in YYYY-MM-DD format for default
+    const todayStr = new Date().toISOString().split('T')[0];
+    
+    const navigate = useNavigate();
+    const [selectedDate, setSelectedDate] = useState(todayStr);
     const [summary, setSummary] = useState(null);
     const [breakdown, setBreakdown] = useState([]);
     const [staffPerformance, setStaffPerformance] = useState([]);
@@ -13,17 +18,16 @@ const Summary = () => {
 
     useEffect(() => {
         fetchData();
-    }, [location.pathname]);
+    }, [location.pathname, selectedDate]);
 
     const fetchData = async () => {
         try {
             setLoading(true);
             const [summaryData, breakdownData, staffData] = await Promise.all([
-                summaryAPI.getToday(),
-                summaryAPI.getBreakdown(),
-                summaryAPI.getStaffPerformance(),
+                summaryAPI.getToday(selectedDate),
+                summaryAPI.getBreakdown(selectedDate),
+                summaryAPI.getStaffPerformance(selectedDate),
             ]);
-            console.log('Summary data received:', summaryData);
             setSummary(summaryData);
             setBreakdown(breakdownData.breakdown);
             setStaffPerformance(staffData.performance);
@@ -41,6 +45,7 @@ const Summary = () => {
         if (!summary || (breakdown.length === 0 && staffPerformance.length === 0)) return;
 
         const csvContent = [
+            `Date: ${selectedDate}`,
             'Service,Count,Total',
             ...breakdown.map(item => `${item.service_name},${item.count},${item.total}`),
             '',
@@ -57,18 +62,23 @@ const Summary = () => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `salon-report-${new Date().toISOString().split('T')[0]}.csv`;
+        a.download = `salon-report-${selectedDate}.csv`;
         a.click();
         window.URL.revokeObjectURL(url);
     };
 
     const handleCloseRegister = async () => {
-        if (!confirm('Are you sure you want to close the register for today? This will save the daily summary.')) {
+        const isToday = selectedDate === todayStr;
+        const msg = isToday 
+            ? 'Are you sure you want to close the register for TODAY? This will save the daily summary.' 
+            : `Are you sure you want to close the register for ${selectedDate}?`;
+            
+        if (!confirm(msg)) {
             return;
         }
 
         try {
-            await summaryAPI.createDailyClosing(new Date().toISOString().split('T')[0]);
+            await summaryAPI.createDailyClosing(selectedDate);
             alert('Daily closing saved successfully!');
         } catch (err) {
             console.error('Error closing register:', err);
@@ -100,6 +110,29 @@ const Summary = () => {
 
     return (
         <div className="page-container">
+            <div style={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center', 
+                marginBottom: '16px',
+                padding: '0 8px'
+            }}>
+                <h2 style={{ margin: 0, fontSize: '20px' }}>Summary</h2>
+                <input 
+                    type="date" 
+                    value={selectedDate} 
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                    style={{
+                        padding: '8px',
+                        borderRadius: '8px',
+                        border: '1px solid var(--border-color)',
+                        fontSize: '14px',
+                        fontFamily: 'inherit',
+                        outline: 'none'
+                    }}
+                />
+            </div>
+
             <div className="summary-cards-row">
                 <div className="summary-card">
                     <span className="card-label">Total Revenue</span>
@@ -149,7 +182,18 @@ const Summary = () => {
                 </div>
             )}
 
-            <div className="actions-row" style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+            <div style={{ marginTop: '20px', padding: '0 8px' }}>
+                <button 
+                    className="btn btn-secondary" 
+                    style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                    onClick={() => navigate('/home/analytics')}
+                >
+                    <BarChart2 size={18} />
+                    View Performance Trends
+                </button>
+            </div>
+
+            <div className="actions-row" style={{ display: 'flex', gap: '10px', marginTop: '16px' }}>
                 <button className="btn btn-primary download-btn" onClick={handleDownload} disabled={!summary || breakdown.length === 0} style={{ flex: 1 }}>
                     <Download size={18} />
                     Download
