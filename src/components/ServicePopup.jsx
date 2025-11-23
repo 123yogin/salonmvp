@@ -1,8 +1,10 @@
 import { Check, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { staffAPI } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const ServicePopup = ({ isOpen, onClose, service, onConfirm }) => {
+    const { user } = useAuth();
     const [paymentMethod, setPaymentMethod] = useState('cash');
     const [price, setPrice] = useState('');
     const [staffId, setStaffId] = useState('');
@@ -19,6 +21,16 @@ const ServicePopup = ({ isOpen, onClose, service, onConfirm }) => {
         try {
             const data = await staffAPI.getAll();
             setStaffList(data.staff);
+            
+            // Auto-select logged-in staff
+            if (user?.role === 'STAFF') {
+                const myStaffRecord = data.staff.find(s => s.email === user.email);
+                if (myStaffRecord) {
+                    setStaffId(myStaffRecord.id);
+                }
+            } else {
+                 setStaffId(''); // Reset for owners so they pick manually
+            }
         } catch (err) {
             console.error('Error fetching staff:', err);
         }
@@ -32,7 +44,7 @@ const ServicePopup = ({ isOpen, onClose, service, onConfirm }) => {
         });
         // Reset form
         setPaymentMethod('cash');
-        setStaffId('');
+        // staffId is reset in useEffect based on role
     };
 
     if (!isOpen || !service) return null;
@@ -71,13 +83,15 @@ const ServicePopup = ({ isOpen, onClose, service, onConfirm }) => {
                     {staffList.length > 0 && (
                         <div className="form-group">
                             <label htmlFor="staff" className="form-label">
-                                Staff (Optional)
+                                Staff {user?.role === 'STAFF' ? '(You)' : '(Optional)'}
                             </label>
                             <select
                                 id="staff"
                                 value={staffId}
                                 onChange={(e) => setStaffId(e.target.value)}
                                 className="form-input"
+                                disabled={user?.role === 'STAFF'}
+                                style={user?.role === 'STAFF' ? { opacity: 0.7, backgroundColor: '#f5f5f5' } : {}}
                             >
                                 <option value="">Select staff</option>
                                 {staffList.map((staff) => (

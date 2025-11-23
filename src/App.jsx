@@ -46,6 +46,19 @@ const LoadingScreen = () => (
     </div>
 );
 
+// Component to restrict access based on role
+const RoleRoute = ({ children, allowedRoles }) => {
+    const { user, loading } = useAuth();
+    
+    if (loading) return <LoadingScreen />;
+    
+    if (!user || !allowedRoles.includes(user.role)) {
+        return <Navigate to="/home" replace />;
+    }
+    
+    return children;
+};
+
 function App() {
     return (
         <AuthProvider>
@@ -55,8 +68,16 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/home" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
                         <Route index element={<Home />} />
-                        <Route path="summary" element={<Summary />} />
-                        <Route path="edit-services" element={<EditServices />} />
+                        <Route path="summary" element={
+                            <RoleRoute allowedRoles={['OWNER']}>
+                                <Summary />
+                            </RoleRoute>
+                        } />
+                        <Route path="edit-services" element={
+                            <RoleRoute allowedRoles={['OWNER']}>
+                                <EditServices />
+                            </RoleRoute>
+                        } />
                         <Route path="profile" element={<Profile />} />
                     </Route>
                 </Routes>

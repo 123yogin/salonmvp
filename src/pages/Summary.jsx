@@ -6,6 +6,7 @@ import { summaryAPI } from '../services/api';
 const Summary = () => {
     const [summary, setSummary] = useState(null);
     const [breakdown, setBreakdown] = useState([]);
+    const [staffPerformance, setStaffPerformance] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const location = useLocation();
@@ -17,14 +18,15 @@ const Summary = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const [summaryData, breakdownData] = await Promise.all([
+            const [summaryData, breakdownData, staffData] = await Promise.all([
                 summaryAPI.getToday(),
                 summaryAPI.getBreakdown(),
+                summaryAPI.getStaffPerformance(),
             ]);
             console.log('Summary data received:', summaryData);
-            console.log('Breakdown data received:', breakdownData);
             setSummary(summaryData);
             setBreakdown(breakdownData.breakdown);
+            setStaffPerformance(staffData.performance);
             setError(null);
         } catch (err) {
             setError('Failed to load summary data');
@@ -36,11 +38,15 @@ const Summary = () => {
 
     const handleDownload = () => {
         // Simple CSV download
-        if (!summary || breakdown.length === 0) return;
+        if (!summary || (breakdown.length === 0 && staffPerformance.length === 0)) return;
 
         const csvContent = [
             'Service,Count,Total',
             ...breakdown.map(item => `${item.service_name},${item.count},${item.total}`),
+            '',
+            'Staff Performance',
+            'Name,Count,Total',
+            ...staffPerformance.map(item => `${item.staff_name},${item.count},${item.total}`),
             '',
             `Total Revenue,,${summary.total_revenue}`,
             `Cash,,${summary.cash_total}`,
@@ -114,19 +120,34 @@ const Summary = () => {
             </div>
 
             <div className="breakdown-list">
+                <h3 style={{ padding: '0 16px', fontSize: '16px', marginBottom: '8px', marginTop: '20px' }}>Service Breakdown</h3>
                 {breakdown.length > 0 ? (
                     breakdown.map((item, index) => (
                         <div key={index} className="breakdown-item">
                             <span className="service-name">{item.service_name}</span>
                             <span className="service-price">{item.count} x ₹{(item.total / item.count).toFixed(2)}</span>
+                            <span style={{fontWeight: 'bold'}}>₹{item.total.toFixed(2)}</span>
                         </div>
                     ))
                 ) : (
-                    <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-secondary)' }}>
+                    <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-secondary)' }}>
                         No services logged today.
                     </div>
                 )}
             </div>
+
+            {staffPerformance.length > 0 && (
+                <div className="breakdown-list">
+                    <h3 style={{ padding: '0 16px', fontSize: '16px', marginBottom: '8px', marginTop: '20px' }}>Staff Performance</h3>
+                    {staffPerformance.map((item, index) => (
+                        <div key={index} className="breakdown-item">
+                            <span className="service-name">{item.staff_name}</span>
+                            <span className="service-price">{item.count} Services</span>
+                            <span style={{fontWeight: 'bold'}}>₹{item.total.toFixed(2)}</span>
+                        </div>
+                    ))}
+                </div>
+            )}
 
             <div className="actions-row" style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
                 <button className="btn btn-primary download-btn" onClick={handleDownload} disabled={!summary || breakdown.length === 0} style={{ flex: 1 }}>

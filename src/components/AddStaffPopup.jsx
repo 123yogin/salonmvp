@@ -3,20 +3,23 @@ import { useState } from 'react';
 
 const AddStaffPopup = ({ isOpen, onClose, onAdd }) => {
     const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [role, setRole] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!name.trim()) return;
+        if (!name.trim() || !email.trim()) return;
 
         onAdd({
             name: name.trim(),
+            email: email.trim(),
             phone: phone.trim() || null,
-            role: role.trim() || null
+            role: role.trim() || 'Staff'
         });
 
         setName('');
+        setEmail('');
         setPhone('');
         setRole('');
     };
@@ -27,7 +30,7 @@ const AddStaffPopup = ({ isOpen, onClose, onAdd }) => {
         <div className="popup-overlay" onClick={onClose}>
             <div className="popup-container" onClick={(e) => e.stopPropagation()}>
                 <div className="popup-header">
-                    <h3 className="popup-title">Add New Staff</h3>
+                    <h3 className="popup-title">Invite Staff Member</h3>
                     <button className="close-btn" onClick={onClose}>
                         <X size={20} />
                     </button>
@@ -49,6 +52,20 @@ const AddStaffPopup = ({ isOpen, onClose, onAdd }) => {
                     </div>
 
                     <div className="form-group">
+                        <label htmlFor="staffEmail" className="form-label">Email (for Login)</label>
+                        <input
+                            type="email"
+                            id="staffEmail"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="form-input"
+                            placeholder="rahul@example.com"
+                            required
+                        />
+                        <small style={{color: 'var(--text-secondary)', fontSize: '12px'}}>They will use this email to log in.</small>
+                    </div>
+
+                    <div className="form-group">
                         <label htmlFor="staffPhone" className="form-label">Phone (Optional)</label>
                         <input
                             type="tel"
@@ -61,14 +78,14 @@ const AddStaffPopup = ({ isOpen, onClose, onAdd }) => {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="staffRole" className="form-label">Role (Optional)</label>
+                        <label htmlFor="staffRole" className="form-label">Role Title (Optional)</label>
                         <input
                             type="text"
                             id="staffRole"
                             value={role}
                             onChange={(e) => setRole(e.target.value)}
                             className="form-input"
-                            placeholder="e.g. Hair Stylist"
+                            placeholder="e.g. Senior Stylist"
                         />
                     </div>
 
@@ -76,7 +93,7 @@ const AddStaffPopup = ({ isOpen, onClose, onAdd }) => {
                         <button type="button" className="btn btn-secondary" onClick={onClose}>Cancel</button>
                         <button type="submit" className="btn btn-primary">
                             <Check size={18} />
-                            Add Staff
+                            Send Invite
                         </button>
                     </div>
                 </form>

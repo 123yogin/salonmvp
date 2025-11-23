@@ -1,4 +1,4 @@
-import { ChevronLeft, LogOut, Mail, MapPin, Phone, Store, User, Users, Plus } from 'lucide-react';
+import { ChevronLeft, LogOut, Mail, MapPin, Phone, Store, User, Users, Plus, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useState, useEffect } from 'react';
@@ -12,10 +12,10 @@ const Profile = () => {
     const [isStaffPopupOpen, setIsStaffPopupOpen] = useState(false);
 
     useEffect(() => {
-        if (salon) {
+        if (salon && user?.role === 'OWNER') {
             fetchStaff();
         }
-    }, [salon]);
+    }, [salon, user]);
 
     const fetchStaff = async () => {
         try {
@@ -31,9 +31,22 @@ const Profile = () => {
             await staffAPI.create(staffData);
             await fetchStaff();
             setIsStaffPopupOpen(false);
+            alert(`Invitation sent to ${staffData.email}. Ask them to Sign Up with this email.`);
         } catch (err) {
             console.error('Error adding staff:', err);
-            alert('Failed to add staff member');
+            alert(err.response?.data?.error || 'Failed to add staff member');
+        }
+    };
+    
+    const handleDeleteStaff = async (staffId) => {
+        if (confirm('Are you sure you want to remove this staff member? They will no longer have access.')) {
+            try {
+                await staffAPI.delete(staffId);
+                await fetchStaff();
+            } catch (err) {
+                console.error('Error deleting staff:', err);
+                alert(err.response?.data?.error || 'Failed to delete staff member');
+            }
         }
     };
 
@@ -87,91 +100,62 @@ const Profile = () => {
                     </div>
                 )}
 
-                {user?.phone && (
-                    <div className="settings-item profile-item">
-                        <div className="settings-item-left">
-                            <Phone size={20} color="var(--text-secondary)" />
-                            <div className="profile-item-content">
-                                <span className="profile-item-label">Phone Number</span>
-                                <span className="profile-item-value">
-                                    {user.phone}
-                                </span>
-                            </div>
+                {/* Only show Staff Management for Owners */}
+                {user?.role === 'OWNER' && (
+                    <>
+                        <div className="section-header" style={{ padding: '20px 24px 10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
+                            <h3 style={{ fontSize: '16px', fontWeight: '600', color: 'var(--text-primary)', margin: 0 }}>Staff Management</h3>
+                            <button 
+                                onClick={() => setIsStaffPopupOpen(true)}
+                                style={{ 
+                                    background: 'var(--color-primary)', 
+                                    color: 'white', 
+                                    border: 'none', 
+                                    borderRadius: '50%', 
+                                    width: '32px', 
+                                    height: '32px', 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    boxShadow: '0 2px 8px rgba(4, 120, 87, 0.3)'
+                                }}
+                            >
+                                <Plus size={18} />
+                            </button>
                         </div>
-                    </div>
-                )}
-
-                {salon?.address && (
-                    <div className="settings-item profile-item">
-                        <div className="settings-item-left">
-                            <MapPin size={20} color="var(--text-secondary)" />
-                            <div className="profile-item-content">
-                                <span className="profile-item-label">Address</span>
-                                <span className="profile-item-value">
-                                    {salon.address}
-                                </span>
+                        
+                        {staffList.map((staff) => (
+                            <div key={staff.id} className="settings-item profile-item" style={{paddingRight: '16px'}}>
+                                <div className="settings-item-left" style={{flex: 1}}>
+                                    <Users size={20} color="var(--text-secondary)" />
+                                    <div className="profile-item-content">
+                                        <span className="profile-item-label">{staff.role || 'Staff'}</span>
+                                        <span className="profile-item-value">{staff.name}</span>
+                                        <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{staff.email}</span>
+                                    </div>
+                                </div>
+                                <button 
+                                    onClick={() => handleDeleteStaff(staff.id)}
+                                    style={{ 
+                                        background: 'transparent', 
+                                        border: 'none', 
+                                        color: '#EF4444',
+                                        cursor: 'pointer',
+                                        padding: '8px'
+                                    }}
+                                >
+                                    <Trash2 size={18} />
+                                </button>
                             </div>
-                        </div>
-                    </div>
-                )}
-
-                {salon?.timezone && (
-                    <div className="settings-item profile-item">
-                        <div className="settings-item-left">
-                            <User size={20} color="var(--text-secondary)" />
-                            <div className="profile-item-content">
-                                <span className="profile-item-label">Timezone</span>
-                                <span className="profile-item-value">
-                                    {salon.timezone}
-                                </span>
+                        ))}
+                        
+                        {staffList.length === 0 && (
+                            <div style={{ padding: '16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '14px' }}>
+                                No staff invited yet.
                             </div>
-                        </div>
-                    </div>
-                )}
-            </div>
-
-            <div className="settings-section">
-                <div className="section-header" style={{ padding: '20px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)' }}>
-                    <h3 style={{ fontSize: '16px', fontWeight: '600', color: 'var(--text-primary)', margin: 0 }}>Staff Members</h3>
-                    <button 
-                        onClick={() => setIsStaffPopupOpen(true)}
-                        style={{ 
-                            background: 'var(--color-primary)', 
-                            color: 'white', 
-                            border: 'none', 
-                            borderRadius: '50%', 
-                            width: '32px', 
-                            height: '32px', 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                            boxShadow: '0 2px 8px rgba(4, 120, 87, 0.3)'
-                        }}
-                    >
-                        <Plus size={18} />
-                    </button>
-                </div>
-                
-                {staffList.map((staff) => (
-                    <div key={staff.id} className="settings-item profile-item">
-                        <div className="settings-item-left">
-                            <Users size={20} color="var(--text-secondary)" />
-                            <div className="profile-item-content">
-                                <span className="profile-item-label">{staff.role || 'Staff'}</span>
-                                <span className="profile-item-value">{staff.name}</span>
-                            </div>
-                        </div>
-                        {staff.phone && (
-                            <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{staff.phone}</span>
                         )}
-                    </div>
-                ))}
-                
-                {staffList.length === 0 && (
-                    <div style={{ padding: '16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '14px' }}>
-                        No staff members added yet.
-                    </div>
+                    </>
                 )}
             </div>
 

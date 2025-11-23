@@ -149,6 +149,11 @@ export const summaryAPI = {
         return response.data;
     },
 
+    getStaffPerformance: async () => {
+        const response = await api.get('/api/summary/staff-performance');
+        return response.data;
+    },
+
     createDailyClosing: async (date) => {
         const response = await api.post('/api/daily-closing', { date });
         return response.data;
@@ -167,6 +172,11 @@ export const staffAPI = {
 
     create: async (staffData) => {
         const response = await api.post('/api/staff', staffData);
+        return response.data;
+    },
+
+    delete: async (staffId) => {
+        const response = await api.delete(`/api/staff/${staffId}`);
         return response.data;
     },
 };
