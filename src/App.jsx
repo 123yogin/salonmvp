@@ -21,7 +21,9 @@ const LandingPageRoute = () => {
     if (loading) {
         return (
             <div className="flex-center" style={{ height: '100vh', flexDirection: 'column', gap: '16px' }}>
-                <div className="spinner"></div>
+                <div className="spinner">
+                    <div className="spinner-inner"></div>
+                </div>
                 <span style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>Loading...</span>
             </div>
         );
@@ -37,7 +39,9 @@ const LandingPageRoute = () => {
 // Loading Component
 const LoadingScreen = () => (
     <div className="flex-center" style={{ height: '100vh', flexDirection: 'column', gap: '16px' }}>
-        <div className="spinner"></div>
+        <div className="spinner">
+            <div className="spinner-inner"></div>
+        </div>
         <span style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>Loading SalonLog...</span>
     </div>
 );

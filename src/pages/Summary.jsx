@@ -59,7 +59,9 @@ const Summary = () => {
     if (loading) {
         return (
             <div className="flex-center" style={{ height: '60vh' }}>
-                <div className="spinner"></div>
+                <div className="spinner">
+                    <div className="spinner-inner"></div>
+                </div>
             </div>
         );
     }

@@ -54,7 +54,9 @@ const Home = () => {
     if (loading) {
         return (
             <div className="flex-center" style={{ height: '60vh' }}>
-                <div className="spinner"></div>
+                <div className="spinner">
+                    <div className="spinner-inner"></div>
+                </div>
             </div>
         );
     }
@@ -68,30 +70,32 @@ const Home = () => {
     }
 
     return (
-        <div className="page-container">
-            <div className="service-grid">
-                {services.map((service) => (
-                    <div
-                        key={service.id}
-                        className="service-card"
-                        onClick={() => handleServiceClick(service)}
-                    >
-                        <div className="service-info">
-                            <span className="service-name">{service.name}</span>
-                            <span className="service-price">₹{service.default_price}</span>
+        <>
+            <div className="page-container">
+                <div className="service-grid">
+                    {services.map((service) => (
+                        <div
+                            key={service.id}
+                            className="service-card"
+                            onClick={() => handleServiceClick(service)}
+                        >
+                            <div className="service-info">
+                                <span className="service-name">{service.name}</span>
+                                <span className="service-price">₹{service.default_price}</span>
+                            </div>
+                            <div className="add-icon">
+                                <Plus size={20} />
+                            </div>
                         </div>
-                        <div className="add-icon">
-                            <Plus size={20} />
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            {services.length === 0 && (
-                <div className="empty-state-message">
-                    No services available. Add services from the Services tab.
+                    ))}
                 </div>
-            )}
+
+                {services.length === 0 && (
+                    <div className="empty-state-message">
+                        No services available. Add services from the Services tab.
+                    </div>
+                )}
+            </div>
 
             <ServicePopup
                 isOpen={isPopupOpen}
@@ -99,7 +103,7 @@ const Home = () => {
                 service={selectedService}
                 onConfirm={handleConfirm}
             />
-        </div>
+        </>
     );
 };
 

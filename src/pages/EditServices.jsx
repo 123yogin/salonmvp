@@ -55,40 +55,44 @@ const EditServices = () => {
     if (loading) {
         return (
             <div className="flex-center" style={{ height: '60vh' }}>
-                <div className="spinner"></div>
+                <div className="spinner">
+                    <div className="spinner-inner"></div>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="page-container">
-            {error && <div className="error-message">{error}</div>}
+        <>
+            <div className="page-container">
+                {error && <div className="error-message">{error}</div>}
 
-            <div className="edit-service-list">
-                {services.map((service) => (
-                    <div key={service.id} className="edit-service-item">
-                        <div className="service-info">
-                            <span className="service-name">{service.name}</span>
-                            <span className="service-price">₹{service.default_price}</span>
+                <div className="edit-service-list">
+                    {services.map((service) => (
+                        <div key={service.id} className="edit-service-item">
+                            <div className="service-info">
+                                <span className="service-name">{service.name}</span>
+                                <span className="service-price">₹{service.default_price}</span>
+                            </div>
+                            <div style={{ display: 'flex', gap: '12px' }}>
+                                <button
+                                    className="icon-btn"
+                                    style={{ padding: '8px', background: 'none', border: 'none', cursor: 'pointer' }}
+                                    onClick={() => handleDeleteService(service.id)}
+                                >
+                                    <Trash2 size={18} color="#EF4444" />
+                                </button>
+                            </div>
                         </div>
-                        <div style={{ display: 'flex', gap: '12px' }}>
-                            <button
-                                className="icon-btn"
-                                style={{ padding: '8px', background: 'none', border: 'none', cursor: 'pointer' }}
-                                onClick={() => handleDeleteService(service.id)}
-                            >
-                                <Trash2 size={18} color="#EF4444" />
-                            </button>
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            {services.length === 0 && !error && (
-                <div className="empty-state-message">
-                    No services yet. Click the button below to add your first service.
+                    ))}
                 </div>
-            )}
+
+                {services.length === 0 && !error && (
+                    <div className="empty-state-message">
+                        No services yet. Click the button below to add your first service.
+                    </div>
+                )}
+            </div>
 
             <div className="fab-container">
                 <button className="fab-btn" onClick={() => setIsAddPopupOpen(true)}>
@@ -102,7 +106,7 @@ const EditServices = () => {
                 onClose={() => setIsAddPopupOpen(false)}
                 onAdd={handleAddService}
             />
-        </div>
+        </>
     );
 };
 
