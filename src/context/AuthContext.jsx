@@ -23,28 +23,31 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const checkAuth = async () => {
-        // Skip auth check if we just logged out (prevents unnecessary API call)
-        if (sessionStorage.getItem('just_logged_out') === 'true') {
-            sessionStorage.removeItem('just_logged_out');
-            setUser(null);
-            setSalon(null);
-            setLoading(false);
-            return;
-        }
-        
         try {
+            // Check if we have a token in storage
+            const token = localStorage.getItem('idToken');
+            if (token) {
+                // Verify backend sync and get user data
             const data = await authAPI.getCurrentUser();
             setUser(data.user);
             setSalon(data.salon);
-        } catch (err) {
-            // User not logged in - silently handle 401 errors (expected behavior)
-            // Don't log 401 errors for /api/auth/me as they're expected when not authenticated
-            if (err.response?.status !== 401 || !err.suppressLog) {
-                // Only log if it's not a suppressed 401 error
-                console.error('Auth check error:', err);
+            } else {
+                // No token, not logged in
+                setUser(null);
+                setSalon(null);
             }
+        } catch (err) {
+            // Token likely invalid or expired
+            // console.log("Auth check failed:", err);
             setUser(null);
             setSalon(null);
+            
+            // Clear tokens if 401 (Unauthorized) or 404 (User not found in DB yet)
+            if (err.response?.status === 401 || err.response?.status === 404) {
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('idToken');
+                localStorage.removeItem('refreshToken');
+            }
         } finally {
             setLoading(false);
         }
@@ -53,11 +56,17 @@ export const AuthProvider = ({ children }) => {
     const login = async (credentials) => {
         try {
             setError(null);
-            const data = await authAPI.login(credentials);
+            // 1. Proxy Login to Backend
+            await authAPI.login(credentials);
+            
+            // 2. Sync Profile with Backend
+            const data = await authAPI.syncProfile();
+            
             setUser(data.user);
             setSalon(data.salon);
             return { success: true };
         } catch (err) {
+            console.error("Login error:", err);
             const errorMessage = err.response?.data?.error || 'Login failed';
             setError(errorMessage);
             return { success: false, error: errorMessage };
@@ -67,12 +76,27 @@ export const AuthProvider = ({ children }) => {
     const register = async (userData) => {
         try {
             setError(null);
-            const data = await authAPI.register(userData);
-            setUser(data.user);
-            setSalon(data.salon);
+            // 1. Proxy Register to Backend
+            const response = await authAPI.register(userData);
+            
+            // 2. Return success
+            return { success: true, requiresVerification: !response.userConfirmed }; 
+            
+        } catch (err) {
+            console.error("Registration error:", err);
+            const errorMessage = err.response?.data?.error || 'Registration failed';
+            setError(errorMessage);
+            return { success: false, error: errorMessage };
+        }
+    };
+    
+    const confirmRegistration = async (email, code) => {
+        try {
+            setError(null);
+            await authAPI.confirmRegistration(email, code);
             return { success: true };
         } catch (err) {
-            const errorMessage = err.response?.data?.error || 'Registration failed';
+            const errorMessage = err.response?.data?.error || 'Verification failed';
             setError(errorMessage);
             return { success: false, error: errorMessage };
         }
@@ -80,15 +104,11 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            // Mark that we're logging out to prevent auth check after page reload
-            sessionStorage.setItem('just_logged_out', 'true');
             await authAPI.logout();
             setUser(null);
             setSalon(null);
         } catch (err) {
             console.error('Logout error:', err);
-            // Still mark as logged out even if API call fails
-            sessionStorage.setItem('just_logged_out', 'true');
             setUser(null);
             setSalon(null);
         }
@@ -101,6 +121,7 @@ export const AuthProvider = ({ children }) => {
         error,
         login,
         register,
+        confirmRegistration,
         logout,
         isAuthenticated: !!user,
     };

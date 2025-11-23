@@ -11,6 +11,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "amazon-cognito-identity-js": "^6.3.16",
     "axios": "^1.13.2",
     "framer-motion": "^12.23.24",
     "lucide-react": "^0.554.0",

@@ -2,99 +2,85 @@ import axios from 'axios';
 
 // Get API configuration from environment variables
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
-const API_TIMEOUT = import.meta.env.VITE_API_TIMEOUT || 10000;
+const API_TIMEOUT = import.meta.env.VITE_API_TIMEOUT || 30000; // Increased to 30s for AWS cold starts
 
 // Create axios instance with default config
 const api = axios.create({
     baseURL: API_BASE_URL,
     timeout: API_TIMEOUT,
-    withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
     },
 });
 
-// Track requests that should suppress 401 errors
-const suppress401Errors = new Set();
+// Helper to get token from local storage
+const getToken = () => localStorage.getItem('idToken');
 
-// Request interceptor to mark auth check requests
+// Request interceptor to add Auth Token
 api.interceptors.request.use((config) => {
-    if (config.url?.includes('/api/auth/me')) {
-        suppress401Errors.add(config.url);
+    const token = getToken();
+    // Don't attach token for auth routes to prevent conflicts
+    if (token && !config.url.includes('/api/auth/cognito-')) {
+        config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
+}, (error) => {
+    return Promise.reject(error);
 });
 
-// Response interceptor to suppress console errors for expected 401s
+// Response interceptor
 api.interceptors.response.use(
-    (response) => {
-        // Remove from tracking if successful
-        if (suppress401Errors.has(response.config?.url)) {
-            suppress401Errors.delete(response.config.url);
-        }
-        return response;
-    },
+    (response) => response,
     (error) => {
-        // Suppress console logging for expected 401s on auth check
-        if (error.config?.url?.includes('/api/auth/me') && 
-            error.response?.status === 401) {
-            // Mark as suppressed to prevent console logging
-            error.suppressLog = true;
-            suppress401Errors.delete(error.config.url);
-            // Prevent browser from logging this as a network error
-            error.config._suppressErrorLog = true;
+        if (error.response?.status === 401) {
+            console.error("Unauthorized access - Token likely expired");
+            // Optional: specific event to trigger global logout
         }
         return Promise.reject(error);
     }
 );
 
 // ============================================
-// Authentication API
+// Authentication API (Backend Proxy)
 // ============================================
 
 export const authAPI = {
-    register: async (userData) => {
-        const response = await api.post('/api/auth/register', userData);
-        return response.data;
-    },
-
     login: async (credentials) => {
-        const response = await api.post('/api/auth/login', credentials);
+        const response = await api.post('/api/auth/cognito-login', credentials);
+        // Save tokens to local storage
+        localStorage.setItem('accessToken', response.data.accessToken);
+        localStorage.setItem('idToken', response.data.idToken);
+        localStorage.setItem('refreshToken', response.data.refreshToken);
         return response.data;
     },
 
-    logout: async () => {
-        const response = await api.post('/api/auth/logout');
+    register: async (userData) => {
+        const response = await api.post('/api/auth/cognito-register', userData);
+        return response.data;
+    },
+
+    confirmRegistration: async (email, code) => {
+        const response = await api.post('/api/auth/cognito-confirm', { email, code });
+        return response.data;
+    },
+
+    // Sync Cognito profile with Backend DB (should be called after login)
+    syncProfile: async (additionalData = {}) => {
+        const response = await api.post('/api/auth/sync-profile', additionalData);
         return response.data;
     },
 
     getCurrentUser: async () => {
-        try {
-            // Use validateStatus to prevent axios from treating 401 as an error
-            // This prevents the browser from logging it as a failed request
-            const response = await api.get('/api/auth/me', {
-                validateStatus: (status) => status === 200 || status === 401,
-                // Suppress error logging for this specific request
-                _suppressErrorLog: true
-            });
-            
-            if (response.status === 401) {
-                // Silently throw error - don't log to console
-                const error = new Error('Not authenticated');
-                error.response = { status: 401 };
-                error.suppressLog = true; // Mark to suppress logging
-                throw error;
-            }
-            
+        const response = await api.get('/api/auth/me');
             return response.data;
-        } catch (error) {
-            // Only throw if it's not a 401 (which is expected when not logged in)
-            if (error.response?.status === 401) {
-                error.suppressLog = true;
-            }
-            throw error;
-        }
     },
+
+    logout: async () => {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('idToken');
+        localStorage.removeItem('refreshToken');
+        return Promise.resolve();
+        }
 };
 
 // ============================================
