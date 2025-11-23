@@ -53,7 +53,7 @@ const LandingPage = () => {
                         src={heroImage}
                         alt="Unisex Salon"
                         className="hero-image"
-                        loading="lazy"
+                        loading="eager"
                         animate={{ y: [0, -20, 0] }}
                         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                     />
