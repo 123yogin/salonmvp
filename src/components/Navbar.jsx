@@ -8,7 +8,7 @@ const Navbar = () => {
 
     const handleLogout = async () => {
         await logout();
-        window.location.href = '/';
+        navigate('/', { replace: true });
     };
 
     const handleScroll = (e, targetId) => {
