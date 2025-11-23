@@ -48,14 +48,14 @@ const ServicePopup = ({ isOpen, onClose, service, onConfirm }) => {
                 </div>
 
                 <div className="popup-body">
-                    <div style={{ marginBottom: '20px' }}>
-                        <p style={{ fontSize: '16px', fontWeight: '500', marginBottom: '4px' }}>
+                    <div className="service-name-display">
+                        <p className="service-name-text">
                             {service.name}
                         </p>
                     </div>
 
-                    <div className="form-group" style={{ marginBottom: '16px' }}>
-                        <label htmlFor="price" style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: 'var(--text-secondary)' }}>
+                    <div className="form-group">
+                        <label htmlFor="price" className="form-label">
                             Price
                         </label>
                         <input
@@ -64,13 +64,13 @@ const ServicePopup = ({ isOpen, onClose, service, onConfirm }) => {
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
                             className="form-input"
-                            style={{ width: '100%' }}
+                            inputMode="decimal"
                         />
                     </div>
 
                     {staffList.length > 0 && (
-                        <div className="form-group" style={{ marginBottom: '16px' }}>
-                            <label htmlFor="staff" style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: 'var(--text-secondary)' }}>
+                        <div className="form-group">
+                            <label htmlFor="staff" className="form-label">
                                 Staff (Optional)
                             </label>
                             <select
@@ -78,7 +78,6 @@ const ServicePopup = ({ isOpen, onClose, service, onConfirm }) => {
                                 value={staffId}
                                 onChange={(e) => setStaffId(e.target.value)}
                                 className="form-input"
-                                style={{ width: '100%' }}
                             >
                                 <option value="">Select staff</option>
                                 {staffList.map((staff) => (
@@ -90,22 +89,18 @@ const ServicePopup = ({ isOpen, onClose, service, onConfirm }) => {
                         </div>
                     )}
 
-                    <div className="form-group" style={{ marginBottom: '20px' }}>
-                        <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: 'var(--text-secondary)' }}>
-                            Payment Method
-                        </label>
-                        <div style={{ display: 'flex', gap: '12px' }}>
+                    <div className="form-group payment-method-group">
+                        <label className="payment-method-label">Payment Method</label>
+                        <div className="payment-method-buttons">
                             <button
                                 className={`btn ${paymentMethod === 'cash' ? 'btn-primary' : 'btn-secondary'}`}
                                 onClick={() => setPaymentMethod('cash')}
-                                style={{ flex: 1 }}
                             >
                                 Cash
                             </button>
                             <button
                                 className={`btn ${paymentMethod === 'upi' ? 'btn-primary' : 'btn-secondary'}`}
                                 onClick={() => setPaymentMethod('upi')}
-                                style={{ flex: 1 }}
                             >
                                 UPI
                             </button>

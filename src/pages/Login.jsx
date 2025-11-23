@@ -90,6 +90,8 @@ const Login = () => {
                             onChange={handleChange}
                             placeholder="your@email.com"
                             className="form-input"
+                            autoComplete="email"
+                            inputMode="email"
                         />
                     </div>
 
@@ -103,6 +105,8 @@ const Login = () => {
                             onChange={handleChange}
                             placeholder="+91 1234567890"
                             className="form-input"
+                            autoComplete="tel"
+                            inputMode="tel"
                         />
                     </div>
 
@@ -117,6 +121,7 @@ const Login = () => {
                                 onChange={handleChange}
                                 placeholder="My Salon"
                                 className="form-input"
+                                autoComplete="organization"
                             />
                         </div>
                     )}
@@ -132,6 +137,7 @@ const Login = () => {
                             placeholder="••••••••"
                             className="form-input"
                             required
+                            autoComplete={isRegister ? "new-password" : "current-password"}
                         />
                     </div>
 

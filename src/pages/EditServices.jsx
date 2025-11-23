@@ -85,7 +85,7 @@ const EditServices = () => {
             </div>
 
             {services.length === 0 && !error && (
-                <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-secondary)' }}>
+                <div className="empty-state-message">
                     No services yet. Click the button below to add your first service.
                 </div>
             )}

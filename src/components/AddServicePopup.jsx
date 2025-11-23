@@ -50,6 +50,7 @@ const AddServicePopup = ({ isOpen, onClose, onAdd }) => {
                                 onChange={(e) => setPrice(e.target.value)}
                                 required
                                 min="0"
+                                inputMode="decimal"
                             />
                         </div>
                     </div>

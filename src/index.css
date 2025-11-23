@@ -58,6 +58,7 @@ body {
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
     overflow-x: hidden;
+    overscroll-behavior-y: none;
 }
 
 #root {

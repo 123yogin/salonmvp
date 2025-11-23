@@ -16,29 +16,23 @@ const Profile = () => {
 
     return (
         <div className="page-container">
-            <div className="header-actions" style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div className="profile-header">
                 <button
                     onClick={() => navigate(-1)}
-                    style={{
-                        background: 'none',
-                        border: 'none',
-                        color: 'var(--text-primary)',
-                        cursor: 'pointer',
-                        padding: '0'
-                    }}
+                    className="profile-back-btn"
                 >
                     <ChevronLeft size={24} />
                 </button>
-                <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>Profile</h2>
+                <h2 className="profile-title">Profile</h2>
             </div>
 
             <div className="settings-section">
-                <div className="settings-item" style={{ cursor: 'default' }}>
+                <div className="settings-item profile-item">
                     <div className="settings-item-left">
                         <Store size={20} color="var(--text-secondary)" />
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <span className="settings-label" style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Salon Name</span>
-                            <span className="settings-value" style={{ fontSize: '16px', fontWeight: '500' }}>
+                        <div className="profile-item-content">
+                            <span className="profile-item-label">Salon Name</span>
+                            <span className="profile-item-value">
                                 {salon?.name || 'Not available'}
                             </span>
                         </div>
@@ -46,12 +40,12 @@ const Profile = () => {
                 </div>
 
                 {user?.email && (
-                    <div className="settings-item" style={{ cursor: 'default' }}>
+                    <div className="settings-item profile-item">
                         <div className="settings-item-left">
                             <Mail size={20} color="var(--text-secondary)" />
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                <span className="settings-label" style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Email</span>
-                                <span className="settings-value" style={{ fontSize: '16px', fontWeight: '500' }}>
+                            <div className="profile-item-content">
+                                <span className="profile-item-label">Email</span>
+                                <span className="profile-item-value">
                                     {user.email}
                                 </span>
                             </div>
@@ -60,12 +54,12 @@ const Profile = () => {
                 )}
 
                 {user?.phone && (
-                    <div className="settings-item" style={{ cursor: 'default' }}>
+                    <div className="settings-item profile-item">
                         <div className="settings-item-left">
                             <Phone size={20} color="var(--text-secondary)" />
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                <span className="settings-label" style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Phone Number</span>
-                                <span className="settings-value" style={{ fontSize: '16px', fontWeight: '500' }}>
+                            <div className="profile-item-content">
+                                <span className="profile-item-label">Phone Number</span>
+                                <span className="profile-item-value">
                                     {user.phone}
                                 </span>
                             </div>
@@ -74,12 +68,12 @@ const Profile = () => {
                 )}
 
                 {salon?.address && (
-                    <div className="settings-item" style={{ cursor: 'default' }}>
+                    <div className="settings-item profile-item">
                         <div className="settings-item-left">
                             <MapPin size={20} color="var(--text-secondary)" />
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                <span className="settings-label" style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Address</span>
-                                <span className="settings-value" style={{ fontSize: '16px', fontWeight: '500' }}>
+                            <div className="profile-item-content">
+                                <span className="profile-item-label">Address</span>
+                                <span className="profile-item-value">
                                     {salon.address}
                                 </span>
                             </div>
@@ -88,12 +82,12 @@ const Profile = () => {
                 )}
 
                 {salon?.timezone && (
-                    <div className="settings-item" style={{ cursor: 'default' }}>
+                    <div className="settings-item profile-item">
                         <div className="settings-item-left">
                             <User size={20} color="var(--text-secondary)" />
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                <span className="settings-label" style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Timezone</span>
-                                <span className="settings-value" style={{ fontSize: '16px', fontWeight: '500' }}>
+                            <div className="profile-item-content">
+                                <span className="profile-item-label">Timezone</span>
+                                <span className="profile-item-value">
                                     {salon.timezone}
                                 </span>
                             </div>

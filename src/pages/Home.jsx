@@ -88,7 +88,7 @@ const Home = () => {
             </div>
 
             {services.length === 0 && (
-                <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-secondary)' }}>
+                <div className="empty-state-message">
                     No services available. Add services from Settings → Edit Services.
                 </div>
             )}

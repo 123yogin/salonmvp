@@ -16,10 +16,10 @@ const Settings = () => {
     return (
         <div className="page-container">
             {salon && (
-                <div style={{ padding: '20px', marginBottom: '20px', background: 'var(--card-bg)', borderRadius: '12px' }}>
-                    <h3 style={{ marginBottom: '8px', fontSize: '18px' }}>{salon.name}</h3>
+                <div className="salon-info-card">
+                    <h3 className="salon-info-title">{salon.name}</h3>
                     {salon.address && (
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>{salon.address}</p>
+                        <p className="salon-info-address">{salon.address}</p>
                     )}
                 </div>
             )}
