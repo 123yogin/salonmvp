@@ -62,22 +62,15 @@ const Login = () => {
                     setLoading(false);
                     return;
                 }
-                // Note: For MVP we just pass fields Cognito expects. 
-                // If you want to save salon_name later, we need to store it in temp state 
-                // or pass it to syncProfile after login. 
-                // For now, let's assume syncProfile will ask for it if missing, or we handle it then.
-                // Actually, AuthContext.login handles syncProfile. 
-                // But syncProfile reads from request body. 
-                // So we need to make sure when we LOGIN, we pass any extra data if it's a first time login?
-                // Or better: syncProfile checks if salon exists. If not, it uses defaults or what we send.
-                // But AuthContext.login only sends creds.
-                // Let's stick to simple flow: Register -> Verify -> Login.
-                // The user will be prompted to set up salon if needed (maybe add that flow later).
+                
+                // Store salon_name in localStorage to be used during profile sync after login
+                if (formData.salon_name && formData.salon_name.trim()) {
+                    localStorage.setItem('pendingSalonName', formData.salon_name.trim());
+                }
                 
                 result = await register({
                     email: formData.email,
                     password: formData.password
-                    // salon_name is currently ignored by Cognito signUp unless custom attribute
                 });
 
                 if (result.success) {

@@ -59,8 +59,20 @@ export const AuthProvider = ({ children }) => {
             // 1. Proxy Login to Backend
             await authAPI.login(credentials);
             
-            // 2. Sync Profile with Backend
-            const data = await authAPI.syncProfile();
+            // 2. Check for pending salon_name from registration
+            const pendingSalonName = localStorage.getItem('pendingSalonName');
+            const additionalData = {};
+            if (pendingSalonName) {
+                additionalData.salon_name = pendingSalonName;
+            }
+            
+            // 3. Sync Profile with Backend
+            const data = await authAPI.syncProfile(additionalData);
+            
+            // 4. Clear pending salon_name after successful sync
+            if (pendingSalonName) {
+                localStorage.removeItem('pendingSalonName');
+            }
             
             setUser(data.user);
             setSalon(data.salon);
