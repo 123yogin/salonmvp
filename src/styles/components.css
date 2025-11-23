@@ -26,6 +26,49 @@
     justify-content: space-between;
 }
 
+/* Responsive top bar */
+@media (max-width: 480px) {
+    .top-bar-content {
+        padding: 0 16px;
+    }
+
+    .app-title {
+        font-size: 20px;
+    }
+
+    .daily-summary-pill {
+        padding: 6px 12px;
+    }
+
+    .summary-text {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 320px) {
+    .top-bar-content {
+        padding: 0 12px;
+    }
+
+    .app-title {
+        font-size: 18px;
+    }
+
+    .daily-summary-pill {
+        padding: 5px 10px;
+        gap: 6px;
+    }
+
+    .summary-text {
+        font-size: 11px;
+    }
+
+    .daily-summary-pill .icon {
+        width: 12px;
+        height: 12px;
+    }
+}
+
 .app-title {
     font-size: 22px;
     font-weight: 700;
@@ -91,6 +134,37 @@
     margin: 0 auto;
 }
 
+/* Responsive bottom nav */
+@media (max-width: 480px) {
+    .bottom-nav-content {
+        gap: 32px;
+        padding: 0 16px;
+    }
+
+    .nav-item {
+        width: 50px;
+    }
+
+    .nav-label {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 320px) {
+    .bottom-nav-content {
+        gap: 24px;
+        padding: 0 12px;
+    }
+
+    .nav-item {
+        width: 45px;
+    }
+
+    .nav-label {
+        font-size: 9px;
+    }
+}
+
 .nav-item {
     display: flex;
     flex-direction: column;
@@ -154,6 +228,19 @@
     position: relative;
     padding: 24px;
     animation: fadeIn 0.5s ease-out;
+}
+
+/* Responsive main content padding */
+@media (max-width: 480px) {
+    .main-content {
+        padding: 20px 16px;
+    }
+}
+
+@media (max-width: 320px) {
+    .main-content {
+        padding: 16px 12px;
+    }
 }
 
 /* Service Popup */

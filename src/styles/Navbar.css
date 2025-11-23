@@ -95,3 +95,54 @@
     }
 }
 
+@media (max-width: 480px) {
+    .navbar-container {
+        padding: 0.75rem 1rem;
+    }
+
+    .navbar-brand h2 {
+        font-size: 1.25rem;
+    }
+
+    .navbar-links {
+        gap: 0.75rem;
+    }
+
+    .navbar-links a {
+        font-size: 0.85rem;
+    }
+
+    .btn-nav {
+        padding: 0.35rem 0.85rem;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 320px) {
+    .navbar-container {
+        padding: 0.6rem 0.75rem;
+    }
+
+    .navbar-brand h2 {
+        font-size: 1.1rem;
+    }
+
+    .navbar-links {
+        gap: 0.5rem;
+    }
+
+    .navbar-links a {
+        font-size: 0.8rem;
+        display: none; /* Hide nav links on very small screens */
+    }
+
+    .navbar-links a:last-of-type {
+        display: block; /* Keep login button visible */
+    }
+
+    .btn-nav {
+        padding: 0.3rem 0.75rem;
+        font-size: 0.8rem;
+    }
+}
+

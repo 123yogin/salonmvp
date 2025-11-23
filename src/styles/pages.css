@@ -4,6 +4,20 @@
     max-width: var(--max-width);
     margin: 0 auto;
     animation: slideUp 0.4s ease-out;
+    padding: 0 24px;
+}
+
+/* Page container responsive */
+@media (max-width: 480px) {
+    .page-container {
+        padding: 0 16px;
+    }
+}
+
+@media (max-width: 320px) {
+    .page-container {
+        padding: 0 12px;
+    }
 }
 
 /* Home Screen */
@@ -12,6 +26,45 @@
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
     width: 100%;
+}
+
+/* Home Screen Responsive */
+@media (max-width: 480px) {
+    .service-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .service-card {
+        padding: 16px;
+    }
+
+    .service-name {
+        font-size: 16px;
+    }
+
+    .service-price {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 320px) {
+    .service-grid {
+        gap: 12px;
+    }
+
+    .service-card {
+        padding: 14px;
+        border-radius: 16px;
+    }
+
+    .service-name {
+        font-size: 15px;
+    }
+
+    .service-price {
+        font-size: 13px;
+    }
 }
 
 .service-card {
@@ -86,7 +139,7 @@
 /* Summary Screen */
 .summary-cards-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
     margin-bottom: 32px;
 }
@@ -180,6 +233,119 @@
     border-radius: 16px;
 }
 
+/* Summary Page Responsive Styles */
+@media (max-width: 480px) {
+    .summary-cards-row {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .summary-card {
+        padding: 20px;
+        border-radius: 20px;
+    }
+
+    .card-label {
+        font-size: 12px;
+    }
+
+    .card-value {
+        font-size: 28px;
+    }
+
+    .split-card {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .split-divider {
+        width: 100%;
+        height: 1px;
+        margin: 0;
+    }
+
+    .split-item {
+        width: 100%;
+    }
+
+    .breakdown-list {
+        border-radius: 20px;
+        margin-bottom: 24px;
+    }
+
+    .breakdown-item {
+        padding: 16px 20px;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .breakdown-item .service-name {
+        font-size: 15px;
+        word-break: break-word;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .breakdown-item .service-price {
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    .download-btn {
+        height: 50px;
+        font-size: 16px;
+        border-radius: 14px;
+    }
+}
+
+@media (max-width: 320px) {
+    .summary-cards-row {
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .summary-card {
+        padding: 16px;
+        border-radius: 16px;
+    }
+
+    .card-label {
+        font-size: 11px;
+    }
+
+    .card-value {
+        font-size: 24px;
+    }
+
+    .split-card {
+        gap: 12px;
+    }
+
+    .breakdown-list {
+        border-radius: 16px;
+        margin-bottom: 20px;
+    }
+
+    .breakdown-item {
+        padding: 14px 16px;
+    }
+
+    .breakdown-item .service-name {
+        font-size: 14px;
+    }
+
+    .breakdown-item .service-price {
+        font-size: 13px;
+    }
+
+    .download-btn {
+        height: 48px;
+        font-size: 15px;
+        border-radius: 12px;
+    }
+}
+
 /* Settings Screen */
 .settings-section {
     background-color: var(--bg-card);
@@ -223,10 +389,35 @@
 /* Edit Services Screen */
 .edit-service-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 16px;
     margin-bottom: 100px;
     /* Space for floating button */
+}
+
+/* Edit Services Responsive */
+@media (max-width: 480px) {
+    .edit-service-list {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 90px;
+    }
+
+    .edit-service-item {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 320px) {
+    .edit-service-list {
+        gap: 10px;
+        margin-bottom: 85px;
+    }
+
+    .edit-service-item {
+        padding: 14px;
+        border-radius: 14px;
+    }
 }
 
 .edit-service-item {
