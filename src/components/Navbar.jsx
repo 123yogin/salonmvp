@@ -32,7 +32,7 @@ const Navbar = () => {
         <nav className="landing-navbar">
             <div className="navbar-container">
                 <div className="navbar-brand" onClick={() => navigate(isAuthenticated ? '/home' : '/')}>
-                    <h2>SalonLog</h2>
+                    <h2>SalonLedger</h2>
                 </div>
 
                 {/* Desktop Navigation */}

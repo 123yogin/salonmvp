@@ -79,7 +79,7 @@ const Login = () => {
                     <div className="login-icon">
                         <Scissors size={32} />
                     </div>
-                    <h1>SalonLog</h1>
+                    <h1>SalonLedger</h1>
                     <p>{isRegister ? 'Create your account' : 'Welcome back'}</p>
                 </div>
 

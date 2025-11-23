@@ -6,7 +6,7 @@ const Footer = () => {
             <div className="footer-container">
                 <div className="footer-content">
                     <div className="footer-section">
-                        <h3>SalonLog</h3>
+                        <h3>SalonLedger</h3>
                         <p>Modern salon management for the digital age.</p>
                     </div>
                     <div className="footer-section">
@@ -19,12 +19,12 @@ const Footer = () => {
                     </div>
                     <div className="footer-section">
                         <h4>Contact</h4>
-                        <p>Email: info@salonlog.com</p>
+                        <p>Email: info@salonledger.com</p>
                         <p>Phone: +1 (555) 123-4567</p>
                     </div>
                 </div>
                 <div className="footer-bottom">
-                    <p>&copy; {new Date().getFullYear()} SalonLog. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} SalonLedger. All rights reserved.</p>
                 </div>
             </div>
         </footer>

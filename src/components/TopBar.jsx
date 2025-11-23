@@ -36,7 +36,7 @@ const TopBar = () => {
     return (
         <header className="top-bar">
             <div className="top-bar-content">
-                <h1 className="app-title">SalonLog</h1>
+                <h1 className="app-title">SalonLedger</h1>
 
                 <div className="daily-summary-pill">
                     <Calendar size={14} className="icon" />

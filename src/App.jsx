@@ -42,7 +42,7 @@ const LoadingScreen = () => (
         <div className="spinner">
             <div className="spinner-inner"></div>
         </div>
-        <span style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>Loading SalonLog...</span>
+        <span style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>Loading SalonLedger...</span>
     </div>
 );
 

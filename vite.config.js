@@ -10,8 +10,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'SalonLog - Salon Management',
-        short_name: 'SalonLog',
+        name: 'SalonLedger - Salon Management',
+        short_name: 'SalonLedger',
         description: 'Modern salon management for the digital age',
         theme_color: '#047857',
         background_color: '#FAFAFA',
