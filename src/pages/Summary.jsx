@@ -56,6 +56,24 @@ const Summary = () => {
         window.URL.revokeObjectURL(url);
     };
 
+    const handleCloseRegister = async () => {
+        if (!confirm('Are you sure you want to close the register for today? This will save the daily summary.')) {
+            return;
+        }
+
+        try {
+            await summaryAPI.createDailyClosing(new Date().toISOString().split('T')[0]);
+            alert('Daily closing saved successfully!');
+        } catch (err) {
+            console.error('Error closing register:', err);
+            if (err.response?.data?.error) {
+                alert(`Error: ${err.response.data.error}`);
+            } else {
+                alert('Failed to close register. Please try again.');
+            }
+        }
+    };
+
     if (loading) {
         return (
             <div className="flex-center" style={{ height: '60vh' }}>
@@ -110,10 +128,15 @@ const Summary = () => {
                 )}
             </div>
 
-            <button className="btn btn-primary download-btn" onClick={handleDownload} disabled={!summary || breakdown.length === 0}>
-                <Download size={18} />
-                Download Report
-            </button>
+            <div className="actions-row" style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+                <button className="btn btn-primary download-btn" onClick={handleDownload} disabled={!summary || breakdown.length === 0} style={{ flex: 1 }}>
+                    <Download size={18} />
+                    Download
+                </button>
+                <button className="btn btn-secondary" onClick={handleCloseRegister} disabled={!summary} style={{ flex: 1 }}>
+                    Close Register
+                </button>
+            </div>
         </div>
     );
 };
