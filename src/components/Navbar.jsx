@@ -56,6 +56,7 @@ const Navbar = () => {
                 </button>
 
                 {/* Mobile Navigation Dropdown */}
+                <div className={`mobile-backdrop ${isMenuOpen ? 'is-open' : ''}`} onClick={() => setIsMenuOpen(false)} />
                 <div className={`mobile-menu ${isMenuOpen ? 'is-open' : ''}`}>
                     <a href="#home" onClick={(e) => handleScroll(e, 'home')}>Home</a>
                     <a href="#services" onClick={(e) => handleScroll(e, 'services')}>Services</a>
