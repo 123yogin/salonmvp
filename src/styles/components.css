@@ -137,8 +137,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 48px;
-    /* Increased gap for cleaner look */
+    gap: 40px;
+    /* Balanced gap for 4 items */
     padding: 0 24px;
     margin: 0 auto;
 }

@@ -1,20 +1,22 @@
-import { FileText, Home, Settings } from 'lucide-react';
+import { FileText, Home, Scissors, User } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 const BottomNav = () => {
     const navItems = [
-        { icon: Home, label: 'Log', path: '/home' },
+        { icon: Home, label: 'Log', path: '/home', exact: true },
         { icon: FileText, label: 'Summary', path: '/home/summary' },
-        { icon: Settings, label: 'Settings', path: '/home/settings' },
+        { icon: Scissors, label: 'Services', path: '/home/edit-services' },
+        { icon: User, label: 'Profile', path: '/home/profile' },
     ];
 
     return (
         <nav className="bottom-nav">
             <div className="bottom-nav-content">
-                {navItems.map(({ icon: Icon, label, path }) => (
+                {navItems.map(({ icon: Icon, label, path, exact }) => (
                     <NavLink
                         key={path}
                         to={path}
+                        end={exact}
                         className={({ isActive }) =>
                             `nav-item ${isActive ? 'active' : ''}`
                         }

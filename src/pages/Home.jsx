@@ -89,7 +89,7 @@ const Home = () => {
 
             {services.length === 0 && (
                 <div className="empty-state-message">
-                    No services available. Add services from Settings → Edit Services.
+                    No services available. Add services from the Services tab.
                 </div>
             )}
 

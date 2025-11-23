@@ -1,10 +1,17 @@
-import { ChevronLeft, Mail, MapPin, Phone, Store, User } from 'lucide-react';
+import { ChevronLeft, LogOut, Mail, MapPin, Phone, Store, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Profile = () => {
     const navigate = useNavigate();
-    const { user, salon, loading } = useAuth();
+    const { user, salon, logout, loading } = useAuth();
+
+    const handleLogout = async () => {
+        if (confirm('Are you sure you want to logout?')) {
+            await logout();
+            navigate('/', { replace: true });
+        }
+    };
 
     if (loading) {
         return (
@@ -17,12 +24,6 @@ const Profile = () => {
     return (
         <div className="page-container">
             <div className="profile-header">
-                <button
-                    onClick={() => navigate(-1)}
-                    className="profile-back-btn"
-                >
-                    <ChevronLeft size={24} />
-                </button>
                 <h2 className="profile-title">Profile</h2>
             </div>
 
@@ -94,6 +95,15 @@ const Profile = () => {
                         </div>
                     </div>
                 )}
+            </div>
+
+            <div className="settings-section">
+                <div className="settings-item" onClick={handleLogout} style={{ cursor: 'pointer' }}>
+                    <div className="settings-item-left">
+                        <LogOut size={20} color="#EF4444" />
+                        <span className="settings-label" style={{ color: '#EF4444' }}>Logout</span>
+                    </div>
+                </div>
             </div>
         </div>
     );
