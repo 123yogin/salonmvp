@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 import ServiceCard from '../components/ServiceCard';
-import './LandingPage.css';
+import '../styles/LandingPage.css';
 
 // Hero image - using placeholder if actual image doesn't exist
 // You can replace this with the actual image path when available

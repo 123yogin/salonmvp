@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import './ServiceCard.css';
+import '../styles/ServiceCard.css';
 
 const ServiceCard = ({ icon, title, delay = 0 }) => {
     return (
