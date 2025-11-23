@@ -49,11 +49,6 @@ function App() {
                 <Routes>
                     <Route path="/" element={<LandingPageRoute />} />
                     <Route path="/login" element={<Login />} />
-                    {/* Redirect old paths to new paths for backward compatibility */}
-                    <Route path="/edit-services" element={<ProtectedRoute><Navigate to="/home/edit-services" replace /></ProtectedRoute>} />
-                    <Route path="/profile" element={<ProtectedRoute><Navigate to="/home/profile" replace /></ProtectedRoute>} />
-                    <Route path="/summary" element={<ProtectedRoute><Navigate to="/home/summary" replace /></ProtectedRoute>} />
-                    <Route path="/settings" element={<ProtectedRoute><Navigate to="/home/profile" replace /></ProtectedRoute>} />
                     <Route path="/home" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
                         <Route index element={<Home />} />
                         <Route path="summary" element={<Summary />} />
