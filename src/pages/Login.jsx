@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion';
+import { Scissors } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -67,17 +69,29 @@ const Login = () => {
 
     return (
         <div className="login-container">
-            <div className="login-card">
+            <motion.div
+                className="login-card"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
                 <div className="login-header">
+                    <div className="login-icon">
+                        <Scissors size={32} />
+                    </div>
                     <h1>SalonLog</h1>
                     <p>{isRegister ? 'Create your account' : 'Welcome back'}</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="login-form">
                     {error && (
-                        <div className="error-message">
+                        <motion.div
+                            className="error-message"
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                        >
                             {error}
-                        </div>
+                        </motion.div>
                     )}
 
                     <div className="form-group">
@@ -111,7 +125,11 @@ const Login = () => {
                     </div>
 
                     {isRegister && (
-                        <div className="form-group">
+                        <motion.div
+                            className="form-group"
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                        >
                             <label htmlFor="salon_name">Salon Name</label>
                             <input
                                 type="text"
@@ -123,7 +141,7 @@ const Login = () => {
                                 className="form-input"
                                 autoComplete="organization"
                             />
-                        </div>
+                        </motion.div>
                     )}
 
                     <div className="form-group">
@@ -166,7 +184,7 @@ const Login = () => {
                         </button>
                     </div>
                 </form>
-            </div>
+            </motion.div>
         </div>
     );
 };
